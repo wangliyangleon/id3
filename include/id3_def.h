@@ -31,7 +31,7 @@ typedef struct _attr_node_t {
 /// const data definition
 const size_t MAX_CORPUS_LINE_LEN = 2048;
 const char CORPUS_SPLIT_CHAR = '\t';
-const size_t MAX_CORPUS_ROW_COUNT = 1024 * 1024;
+const size_t MAX_CORPUS_ROW_COUNT = 1024 * 32;
 const size_t MAX_ATTR_TYPE_COUNT = 1024;
 const size_t MAX_VALUE_PER_ATTR = 128;
 const char* const POS_SAMPLE_SIGN = "1";
