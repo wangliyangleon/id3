@@ -33,7 +33,13 @@ public:
      *      @return     0       succ
      *                  -1      failed
      */
-    int init(std::string file);
+    int init(const std::string& file);
+
+    /**
+     *      clear gdata
+     */
+    void clear();
+
 
     /**
      *      check if corpus pos
@@ -43,7 +49,8 @@ public:
      *                  -1      bad id
      */
     inline int is_pos_corpus(int corpus_id) {
-        return (corpus_id < _corpus_count ? _corpus_value[corpus_id] : -1);
+        return ((corpus_id >= 0) && (corpus_id < _corpus_count)
+                ? _corpus_value[corpus_id] : -1);
     }
 
     /**
@@ -53,7 +60,8 @@ public:
      *                  0       bad attr id
      */
     inline int get_attr_value_count(int attr_id) {
-        return (attr_id < _attr_count ? _attr_value_count[attr_id] : 0);
+        return ((attr_id >= 0) && (attr_id < _attr_count)
+                ? _attr_value_count[attr_id] : 0);
     }
 
     /**
@@ -63,7 +71,9 @@ public:
      *      @return     >=0     attr value
      */
     inline int get_attr_value(int corpus_id, int attr_id) {
-        return (corpus_id >= _corpus_count || attr_id >= _attr_count ?
+        return ((corpus_id < 0) || (attr_id < 0)
+                || (corpus_id >= _corpus_count)
+                || (attr_id >= _attr_count) ?
                 -1 : _corpus_table[corpus_id][attr_id]);
     }
 
@@ -91,6 +101,10 @@ public:
     }
 
 private:
+    GlobalData() :
+        _corpus_count(0),
+        _attr_count(0) {}
+    static GlobalData* _instance;
 
     /// counts
     int _corpus_count;
@@ -109,10 +123,6 @@ private:
     /// globle set
     std::set<int> _globle_corpus_set;
     std::set<int> _globle_attr_set;
-    
-
-    GlobalData() {}
-    static GlobalData* _instance;
 };
 
 }

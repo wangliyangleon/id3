@@ -30,16 +30,18 @@ int main() {
     }
 
     id3::attr_node_t* root = NULL;
-    if (0 != id3_test.id3_solution(root,
-            *(gdata->get_globle_corpus()),
-            *(gdata->get_globle_attrs()),
-            NULL)) {
+    if (0 != id3_test.id3_solution(
+                *(gdata->get_globle_corpus()),
+                NULL,
+                *(gdata->get_globle_attrs()),
+                &root)) {
         std::cerr << "build solution tree failed" << std::endl;
         return -1;
     }
 
     /// trans des tree
     trans_node(root, "");
+    id3_test.destroy(&root);
 
     return 0;
 }

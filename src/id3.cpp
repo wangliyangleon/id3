@@ -2,23 +2,24 @@
 
 namespace id3 {
 
-int Id3::id3_solution(attr_node_t*& root,
-        const std::set<int>& corpus,
+int Id3::id3_solution(const std::set<int>& corpus,
+        attr_node_t* parent,
         std::set<int>& attrs,
-        attr_node_t* parent) {
+        attr_node_t** root) {
     GlobalData* gdata = GlobalData::get_instance();
     if (NULL == gdata) {
         std::cerr << "get gdata failed" << std::endl;
         return -1;
     }
 
-    root = new (std::nothrow) attr_node_t;
-    if (NULL == root) {
+    *root = new (std::nothrow) attr_node_t;
+    if (NULL == *root) {
         std::cerr << "alloc new node failed" << std::endl;
         return -1;
     }
 
-    root->parent_node = parent;
+    attr_node_t* cur_node = *root;
+    cur_node->parent_node = parent;
     // no attr, finish
     if (attrs.empty()) {
         return 0;
@@ -38,14 +39,14 @@ int Id3::id3_solution(attr_node_t*& root,
         }
     }
     if (0 == pos_cnt || sum == pos_cnt) {
-        root->rate = pos_cnt / sum;
-        root->attr_id = -1;
+        cur_node->rate = pos_cnt / sum;
+        cur_node->attr_id = -1;
         return 0;
     }
 
     /// find best attribute, then erase it in the attrs
     int cur_attr_id = find_best_attr(corpus, attrs);
-    root->attr_id = cur_attr_id;
+    cur_node->attr_id = cur_attr_id;
 
     std::set<int>::iterator iter = attrs.find(cur_attr_id);
     if (attrs.end() == iter) {
@@ -73,11 +74,11 @@ int Id3::id3_solution(attr_node_t*& root,
             std::cerr << "empty sub corpus, parant attr: " << cur_attr_id << std::endl;
             continue;
         }
-        if (0 != id3_solution(subtree, *iter, attrs, root)) {
+        if (0 != id3_solution(*iter, cur_node, attrs, &subtree)) {
             std::cerr << "build sub tree failed" << std::endl;
             continue;
         }
-        root->children_nodes.push_back(subtree);
+        cur_node->children_nodes.push_back(subtree);
     }
     return 0;
 }
@@ -103,6 +104,10 @@ double Id3::get_gain(const std::set<int>& corpus, int attr_id) {
         std::cerr << "get gdata failed" << std::endl;
         return 0.0;
     }
+    if (0 == corpus.size()) {
+        std::cerr << "empty corpus" << std::endl;
+        return 0.0;
+    }
     int attr_count = gdata->get_attr_value_count(attr_id);
     double ans = gdata->get_entropy(corpus);
     double sum = corpus.size();
@@ -121,6 +126,17 @@ double Id3::get_gain(const std::set<int>& corpus, int attr_id) {
         ans -= iter->size() / sum * gdata->get_entropy(*iter);
     }
     return ans;
+}
+
+void Id3::destroy(attr_node_t** root) {
+    if (NULL == *root) {
+        return;
+    }
+    for (size_t i = 0; i < (*root)->children_nodes.size(); ++i) {
+        destroy(&((*root)->children_nodes.at(i)));
+    }
+    delete *root;
+    *root = NULL;
 }
 
 }

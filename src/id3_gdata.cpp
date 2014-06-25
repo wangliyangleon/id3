@@ -4,14 +4,19 @@ namespace id3 {
 
 GlobalData* GlobalData::_instance = NULL;
 
-int GlobalData::init(std::string file) {
+int GlobalData::init(const std::string& file) {
+    int ret = 0;
     char line[MAX_CORPUS_LINE_LEN];
     int attr_index_array[MAX_ATTR_TYPE_COUNT];
+    Sign sign;
+    int line_index = 0;
+    std::vector<std::map<uint64_t, int> > attr_value_index_maps;
 
     /// open corpus
     FILE* fp = fopen(file.c_str(), "r");
     if (NULL == fp) {
         std::cerr << "open corpus file " << file.c_str() << " failed" << std::endl;
+        clear();
         return -1;
     }
 
@@ -32,13 +37,13 @@ int GlobalData::init(std::string file) {
     }
     if (attr_cnt < 1) {
         std::cerr << "corpus fields count is at least 2" << std::endl;
-        return -1;
+        ret = -1;
+        clear();
+        goto EXIT;
     }
 
     /// process first line and init attr value set
-    Sign sign;
-    int line_index = 0;
-    std::vector<std::map<uint64_t, int> > attr_value_index_maps(attr_cnt);
+    attr_value_index_maps.resize(attr_cnt);
     for (int i = 0; i < attr_cnt; ++i) {
         const char* cur_attr = line + attr_index_array[i];
         if (0 != create_sign_64(cur_attr, strlen(cur_attr), sign)) {
@@ -102,7 +107,17 @@ int GlobalData::init(std::string file) {
     for (int i = 0; i < _attr_count; ++i) {
         _attr_value_count[i] = attr_value_index_maps.at(i).size();
     }
-    return 0;
+
+EXIT:
+    fclose(fp);
+    return ret;
+}
+
+void GlobalData::clear() {
+    _corpus_count = 0;
+    _attr_count = 0;
+    _globle_corpus_set.clear();
+    _globle_attr_set.clear();
 }
 
 double GlobalData::get_entropy(const std::set<int> &corpus) {

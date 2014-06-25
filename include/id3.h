@@ -19,17 +19,17 @@ class Id3 {
 public:
     /**
      *      build tree
-     *      @param      root    [out]       tree root
      *      @param      corpus  [in]        corpus
-     *      @param      attr    [in|out]    attrs
      *      @param      parent  [in]        parent node
+     *      @param      attr    [in|out]    attrs
+     *      @param      root    [out]       tree root
      *      @return     0       succ
      *                  -1      failed
      */
-    int id3_solution(attr_node_t*& root,
-            const std::set<int>& corpus,
+    int id3_solution(const std::set<int>& corpus,
+            attr_node_t* parent,
             std::set<int>& attrs,
-            attr_node_t* parent);
+            attr_node_t** root);
 
     /**
      *      find test attr
@@ -47,6 +47,12 @@ public:
      *      @return     double      gain
      */
     double get_gain(const std::set<int>& corpus, int attr_id);
+
+    /**
+     *      destroy a tree
+     *      @param      root    [in|out]    tree root
+     */
+    void destroy(attr_node_t** root);
 
     
 private:
