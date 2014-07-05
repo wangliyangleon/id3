@@ -31,64 +31,64 @@ int main(int argc, char **argv) {
 }
 
 TEST_F(GdataTest, test_load_and_clear) {
-    std::set<int>* pset = NULL;
+    std::set<int>* pset = nullptr;
     id3::GlobalData* gdata = id3::GlobalData::get_instance();
-    ASSERT_NE((id3::GlobalData*)NULL, gdata);
+    ASSERT_NE((id3::GlobalData*)nullptr, gdata);
 
     /// good cases
     // init and check size (normal)
     ASSERT_EQ(0, gdata->init("./test_data/test.dat"));
     pset = gdata->get_globle_corpus();
-    ASSERT_NE((std::set<int>*)NULL, pset);
+    ASSERT_NE((std::set<int>*)nullptr, pset);
     ASSERT_EQ(14u, pset->size());
     pset = gdata->get_globle_attrs();
-    ASSERT_NE((std::set<int>*)NULL, pset);
+    ASSERT_NE((std::set<int>*)nullptr, pset);
     ASSERT_EQ(4u, pset->size());
     // clear and check size
     gdata->clear();
     pset = gdata->get_globle_corpus();
-    ASSERT_NE((std::set<int>*)NULL, pset);
+    ASSERT_NE((std::set<int>*)nullptr, pset);
     ASSERT_EQ(0u, pset->size());
     pset = gdata->get_globle_attrs();
-    ASSERT_NE((std::set<int>*)NULL, pset);
+    ASSERT_NE((std::set<int>*)nullptr, pset);
     ASSERT_EQ(0u, pset->size());
     // init and check size (has 2 bad lines)
     ASSERT_EQ(0, gdata->init("./test_data/test_2_bad_lines.dat"));
     pset = gdata->get_globle_corpus();
-    ASSERT_NE((std::set<int>*)NULL, pset);
+    ASSERT_NE((std::set<int>*)nullptr, pset);
     ASSERT_EQ(12u, pset->size());
     pset = gdata->get_globle_attrs();
-    ASSERT_NE((std::set<int>*)NULL, pset);
+    ASSERT_NE((std::set<int>*)nullptr, pset);
     ASSERT_EQ(4u, pset->size());
 
 
     /// bad cases
     // not exist
     ASSERT_EQ(-1, gdata->init("./test_data/test_not_exist.dat"));
-    ASSERT_NE((std::set<int>*)NULL, pset);
+    ASSERT_NE((std::set<int>*)nullptr, pset);
     ASSERT_EQ(0u, pset->size());
     pset = gdata->get_globle_attrs();
-    ASSERT_NE((std::set<int>*)NULL, pset);
+    ASSERT_NE((std::set<int>*)nullptr, pset);
     ASSERT_EQ(0u, pset->size());
     // bad format
     ASSERT_EQ(-1, gdata->init("./test_data/test_bad_format.dat"));
-    ASSERT_NE((std::set<int>*)NULL, pset);
+    ASSERT_NE((std::set<int>*)nullptr, pset);
     ASSERT_EQ(0u, pset->size());
     pset = gdata->get_globle_attrs();
-    ASSERT_NE((std::set<int>*)NULL, pset);
+    ASSERT_NE((std::set<int>*)nullptr, pset);
     ASSERT_EQ(0u, pset->size());
     // empty
     ASSERT_EQ(-1, gdata->init("./test_data/test_empty.dat"));
-    ASSERT_NE((std::set<int>*)NULL, pset);
+    ASSERT_NE((std::set<int>*)nullptr, pset);
     ASSERT_EQ(0u, pset->size());
     pset = gdata->get_globle_attrs();
-    ASSERT_NE((std::set<int>*)NULL, pset);
+    ASSERT_NE((std::set<int>*)nullptr, pset);
     ASSERT_EQ(0u, pset->size());
 }
  
 TEST_F(GdataTest, test_check_corpus) {
     id3::GlobalData* gdata = id3::GlobalData::get_instance();
-    ASSERT_NE((id3::GlobalData*)NULL, gdata);
+    ASSERT_NE((id3::GlobalData*)nullptr, gdata);
     gdata->clear();
     ASSERT_EQ(0, gdata->init("./test_data/test.dat"));
 
@@ -126,7 +126,7 @@ TEST_F(GdataTest, test_check_corpus) {
 TEST_F(GdataTest, test_check_entropy) {
     std::set<int> test_corpus;
     id3::GlobalData* gdata = id3::GlobalData::get_instance();
-    ASSERT_NE((id3::GlobalData*)NULL, gdata);
+    ASSERT_NE((id3::GlobalData*)nullptr, gdata);
     gdata->clear();
     ASSERT_EQ(0, gdata->init("./test_data/test.dat"));
     

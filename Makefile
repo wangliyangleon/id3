@@ -2,14 +2,10 @@
 ####################64Bit Mode####################
 ifeq ($(shell uname -m),x86_64)
 .PHONY:all
-all:xmake_makefile_check id3 libid3.a test 
+all:id3 libid3.a test 
 	@echo "[[1;32;40mXMAKE:BUILD[0m][Target:'[1;32;40mall[0m']"
 	@echo "make all done"
 
-.PHONY:xmake_makefile_check
-xmake_makefile_check:
-	@echo "[[1;32;40mXMAKE:BUILD[0m][Target:'[1;32;40mxmake_makefile_check[0m']"
-	@if [ "XMAKE" -nt "Makefile" ] ; then echo "[ERROR]PLEASE UPDATE 'Makefile' BY 'xmake'" ; exit 250 ;  fi
 
 .PHONY:clean
 clean:
@@ -37,9 +33,9 @@ id3:src/id3_id3_util.o \
 	g++ src/id3_id3_util.o \
   src/id3_id3_gdata.o \
   src/id3_id3.o \
-  src/id3_main.o -Xlinker "-("  thirdparty/gtest/lib/libgtest.a  -Xlinker "-)" -o id3
+  src/id3_main.o ./thirdparty/gtest/lib/libgtest.a -o id3
 	mkdir -p ./output/bin
-	cp -f --link id3 ./output/bin
+	cp -f id3 ./output/bin
 
 libid3.a:src/id3_id3_util.o \
   src/id3_id3_gdata.o \
@@ -51,7 +47,7 @@ libid3.a:src/id3_id3_util.o \
   src/id3_id3.o \
   src/id3_main.o
 	mkdir -p ./output/lib
-	cp -f --link libid3.a ./output/lib
+	cp -f libid3.a ./output/lib
 
 .PHONY:test
 test:libid3.a
@@ -83,14 +79,15 @@ src/id3_id3_util.o:src/id3_util.cpp \
   -D__64BIT__ \
   -D_FILE_OFFSET_BITS=64 -g \
   -pipe \
+  -std=c++11 \
   -W \
   -Wall \
   -fPIC \
   -O2 \
   -Wpointer-arith \
   -Wconversion \
-  -rdynamic \
   -Wno-invalid-offsetof \
+  -Wc++11-extensions \
   -fstrict-aliasing  -o src/id3_id3_util.o src/id3_util.cpp
 
 src/id3_id3_gdata.o:src/id3_gdata.cpp \
@@ -117,14 +114,15 @@ src/id3_id3_gdata.o:src/id3_gdata.cpp \
   -D__64BIT__ \
   -D_FILE_OFFSET_BITS=64 -g \
   -pipe \
+  -std=c++11 \
   -W \
   -Wall \
   -fPIC \
   -O2 \
   -Wpointer-arith \
   -Wconversion \
-  -rdynamic \
   -Wno-invalid-offsetof \
+  -Wc++11-extensions \
   -fstrict-aliasing  -o src/id3_id3_gdata.o src/id3_gdata.cpp
 
 src/id3_id3.o:src/id3.cpp \
@@ -152,14 +150,15 @@ src/id3_id3.o:src/id3.cpp \
   -D__64BIT__ \
   -D_FILE_OFFSET_BITS=64 -g \
   -pipe \
+  -std=c++11 \
   -W \
   -Wall \
   -fPIC \
   -O2 \
   -Wpointer-arith \
   -Wconversion \
-  -rdynamic \
   -Wno-invalid-offsetof \
+  -Wc++11-extensions \
   -fstrict-aliasing  -o src/id3_id3.o src/id3.cpp
 
 src/id3_main.o:src/main.cpp \
@@ -187,14 +186,15 @@ src/id3_main.o:src/main.cpp \
   -D__64BIT__ \
   -D_FILE_OFFSET_BITS=64 -g \
   -pipe \
+  -std=c++11 \
   -W \
   -Wall \
   -fPIC \
   -O2 \
   -Wpointer-arith \
   -Wconversion \
-  -rdynamic \
   -Wno-invalid-offsetof \
+  -Wc++11-extensions \
   -fstrict-aliasing  -o src/id3_main.o src/main.cpp
 
 endif #ifeq ($(shell uname -m),x86_64)

@@ -2,7 +2,7 @@
 
 namespace id3 {
 
-GlobalData* GlobalData::_instance = NULL;
+GlobalData* GlobalData::_instance = nullptr;
 
 int GlobalData::init(const std::string& file) {
     int ret = 0;
@@ -14,7 +14,7 @@ int GlobalData::init(const std::string& file) {
 
     /// open corpus
     FILE* fp = fopen(file.c_str(), "r");
-    if (NULL == fp) {
+    if (nullptr == fp) {
         std::cerr << "open corpus file " << file.c_str() << " failed" << std::endl;
         clear();
         return -1;
@@ -43,7 +43,7 @@ int GlobalData::init(const std::string& file) {
     }
 
     /// process first line and init attr value set
-    attr_value_index_maps.resize(attr_cnt);
+    attr_value_index_maps.resize((size_t)attr_cnt);
     for (int i = 0; i < attr_cnt; ++i) {
         const char* cur_attr = line + attr_index_array[i];
         if (0 != create_sign_64(cur_attr, strlen(cur_attr), sign)) {
@@ -84,7 +84,7 @@ int GlobalData::init(const std::string& file) {
                 std::cerr << "create sign for " << cur_attr << " failed" << std::endl;
                 continue;
             }
-            std::map<uint64_t, int>::const_iterator iter = attr_value_index_maps.at(i).find(sign.s);
+            auto iter = attr_value_index_maps.at(i).find(sign.s);
             if (iter == attr_value_index_maps.at(i).end()) {
                 int attr_value = attr_value_index_maps.at(i).size();
                 _corpus_table[line_index][i] = attr_value;
@@ -121,11 +121,13 @@ void GlobalData::clear() {
 }
 
 double GlobalData::get_entropy(const std::set<int> &corpus) {
+    auto flg2 = [](double d) {
+        return log(d) / log(2);
+    };
     int pos_cnt = 0, neg_cnt = 0, sum = corpus.size();
     double ans = 0.0;
-    for(std::set<int>::const_iterator iter = corpus.begin();
-            iter != corpus.end(); ++iter) {
-        int is_pos = is_pos_corpus(*iter);
+    for(auto cp : corpus) {
+        int is_pos = is_pos_corpus(cp);
         if (1 == is_pos) {
             ++pos_cnt;
         } else if (0 == is_pos) {
@@ -138,8 +140,8 @@ double GlobalData::get_entropy(const std::set<int> &corpus) {
     if (0 == pos_cnt || 0 == neg_cnt) {
         ans = 0.0;
     } else {
-        ans = - (double)pos_cnt / sum * lg2((double)pos_cnt / sum)
-            - (double)neg_cnt / sum * lg2((double)neg_cnt / sum);
+        ans = - (double)pos_cnt / sum * flg2((double)pos_cnt / sum)
+            - (double)neg_cnt / sum * flg2((double)neg_cnt / sum);
     }
     return ans;  
 }

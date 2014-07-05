@@ -32,7 +32,7 @@ int main(int argc, char **argv) {
 TEST_F(Id3Test, test_find_best_attr) {
     id3::Id3 id3_test;                                
     id3::GlobalData* gdata = id3::GlobalData::get_instance();
-    ASSERT_NE((id3::GlobalData*)NULL, gdata);
+    ASSERT_NE((id3::GlobalData*)nullptr, gdata);
     gdata->clear();
     ASSERT_EQ(0, gdata->init("./test_data/test.dat"));
 
@@ -58,64 +58,64 @@ TEST_F(Id3Test, test_find_best_attr) {
 
 TEST_F(Id3Test, test_build_and_destroy) {
     id3::Id3 id3_test;                                
-    id3::attr_node_t* root = NULL;
-    id3::attr_node_t* node = NULL;
+    id3::attr_node_t* root = nullptr;
+    id3::attr_node_t* node = nullptr;
     id3::GlobalData* gdata = id3::GlobalData::get_instance();
-    ASSERT_NE((id3::GlobalData*)NULL, gdata);
+    ASSERT_NE((id3::GlobalData*)nullptr, gdata);
     gdata->clear();
     ASSERT_EQ(0, gdata->init("./test_data/test.dat"));
 
     /// good cases, regression test cases
     ASSERT_EQ(0, id3_test.id3_solution(
                 *(gdata->get_globle_corpus()),
-                NULL,
+                nullptr,
                 *(gdata->get_globle_attrs()),
                 &root));
 
     /// lv1
-    ASSERT_NE((id3::attr_node_t*)NULL, root);
+    ASSERT_NE((id3::attr_node_t*)nullptr, root);
     ASSERT_EQ(0, root->attr_id);
     ASSERT_EQ(3u, root->children_nodes.size());
 
     /// lv2
     node = root->children_nodes.at(0);
-    ASSERT_NE((id3::attr_node_t*)NULL, node);
+    ASSERT_NE((id3::attr_node_t*)nullptr, node);
     ASSERT_EQ(2, node->attr_id);
     ASSERT_EQ(2u, node->children_nodes.size());
     node = root->children_nodes.at(1);
-    ASSERT_NE((id3::attr_node_t*)NULL, node);
+    ASSERT_NE((id3::attr_node_t*)nullptr, node);
     ASSERT_EQ(-1, node->attr_id);
     ASSERT_EQ(0u, node->children_nodes.size());
     ASSERT_DOUBLE_EQ(1.0, node->rate);
     node = root->children_nodes.at(2);
-    ASSERT_NE((id3::attr_node_t*)NULL, node);
+    ASSERT_NE((id3::attr_node_t*)nullptr, node);
     ASSERT_EQ(3, node->attr_id);
     ASSERT_EQ(2u, node->children_nodes.size());
 
     /// lv3
     node = root->children_nodes.at(0)->children_nodes.at(0);
-    ASSERT_NE((id3::attr_node_t*)NULL, node);
+    ASSERT_NE((id3::attr_node_t*)nullptr, node);
     ASSERT_EQ(-1, node->attr_id);
     ASSERT_EQ(0u, node->children_nodes.size());
     ASSERT_DOUBLE_EQ(0.0, node->rate); 
     node = root->children_nodes.at(0)->children_nodes.at(1);
-    ASSERT_NE((id3::attr_node_t*)NULL, node);
+    ASSERT_NE((id3::attr_node_t*)nullptr, node);
     ASSERT_EQ(-1, node->attr_id);
     ASSERT_EQ(0u, node->children_nodes.size());
     ASSERT_DOUBLE_EQ(1.0, node->rate); 
     node = root->children_nodes.at(2)->children_nodes.at(0);
-    ASSERT_NE((id3::attr_node_t*)NULL, node);
+    ASSERT_NE((id3::attr_node_t*)nullptr, node);
     ASSERT_EQ(-1, node->attr_id);
     ASSERT_EQ(0u, node->children_nodes.size());
     ASSERT_DOUBLE_EQ(1.0, node->rate); 
     node = root->children_nodes.at(2)->children_nodes.at(1);
-    ASSERT_NE((id3::attr_node_t*)NULL, node);
+    ASSERT_NE((id3::attr_node_t*)nullptr, node);
     ASSERT_EQ(-1, node->attr_id);
     ASSERT_EQ(0u, node->children_nodes.size());
     ASSERT_DOUBLE_EQ(0.0, node->rate); 
 
     id3_test.destroy(&root);
-    ASSERT_EQ((id3::attr_node_t*)NULL, root);
+    ASSERT_EQ((id3::attr_node_t*)nullptr, root);
 
 }
 

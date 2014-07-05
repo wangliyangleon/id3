@@ -72,20 +72,20 @@ uint32_t mod_prime_array_2[256] = {
     14396166,  11211915,   1349211,   9854036,   6053366,   6159388,  16523821,   2244028
 };
 
-static uint32_t gen_sign_32_high(const char *str, int len)
+static uint32_t gen_sign_32_high(const char *str, size_t len)
 {
     uint32_t sign = 0;
-    for (int i = 0; i < len; ++i)
+    for (size_t i = 0; i < len; ++i)
     {
         sign = ((unsigned char)str[i] * mod_prime_array_1[0xff & i] + sign);
     }
     return sign;
 }
 
-static uint32_t gen_sign_32_low(const char *str, int len)
+static uint32_t gen_sign_32_low(const char *str, size_t len)
 {
     uint32_t sign = 0;
-    for (int i = 0; i < len; ++i)
+    for (size_t i = 0; i < len; ++i)
     {
         sign = ((unsigned char)str[i] * mod_prime_array_2[0xff & i] + sign);
     }
@@ -113,6 +113,7 @@ int create_sign_64(const char *str, size_t len, Sign& sign) {
 
 }
 
+// change to lambda
 double lg2(double n) {
     return log(n) / log(2);
 } 

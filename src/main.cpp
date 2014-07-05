@@ -1,7 +1,7 @@
 #include <id3.h>
 
 void trans_node(id3::attr_node_t* pnode, std::string pre) {
-    if (NULL == pnode) {
+    if (nullptr == pnode) {
         return;
     }
     if (pnode->attr_id < 0) {
@@ -10,16 +10,15 @@ void trans_node(id3::attr_node_t* pnode, std::string pre) {
         std::cout << pre.c_str() << "cur attr id: " << pnode->attr_id << std::endl;
     }
 
-    for (std::vector<id3::attr_node_t*>::const_iterator iter = pnode->children_nodes.begin();
-            iter != pnode->children_nodes.end(); ++iter) {
-        trans_node(*iter, pre + "\t");
+    for (auto node : pnode->children_nodes) {
+        trans_node(node, pre + "\t");
     }
 }
 
 int main() {
     id3::Id3 id3_test;
     id3::GlobalData* gdata = id3::GlobalData::get_instance();
-    if (NULL == gdata) {
+    if (nullptr == gdata) {
         std::cerr << "get gdata failed" << std::endl;
         return -1;
     }
@@ -29,10 +28,10 @@ int main() {
         return -1;
     }
 
-    id3::attr_node_t* root = NULL;
+    id3::attr_node_t* root = nullptr;
     if (0 != id3_test.id3_solution(
                 *(gdata->get_globle_corpus()),
-                NULL,
+                nullptr,
                 *(gdata->get_globle_attrs()),
                 &root)) {
         std::cerr << "build solution tree failed" << std::endl;

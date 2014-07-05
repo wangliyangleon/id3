@@ -50,7 +50,7 @@ TEST_F(UtilTest, test_create_sign) {
     EXPECT_EQ(test_sign.s, check_sign.s);
 
     /// bad cases
-    ASSERT_EQ(-1, id3::create_sign_64(NULL, 0, test_sign));
+    ASSERT_EQ(-1, id3::create_sign_64(nullptr, 0, test_sign));
     ASSERT_EQ(-1, id3::create_sign_64("test", 0, test_sign));
 }
 
