@@ -27,7 +27,7 @@ int Id3::id3_solution(const std::set<int>& corpus,
 
     // check if is leaf node
     int pos_cnt = 0, neg_cnt = 0, sum = corpus.size();
-    for (auto cp : corpus) {
+    for (const auto& cp : corpus) {
         int pos_ret = gdata->is_pos_corpus(cp);
         if (1 == pos_ret) {
             ++pos_cnt;
@@ -57,7 +57,7 @@ int Id3::id3_solution(const std::set<int>& corpus,
     /// split corpus into parts, and biuld sub tree recursively
     int attr_value_cnt = gdata->get_attr_value_count(cur_attr_id);
     std::vector<std::set<int> > sub_corpus(attr_value_cnt);
-    for (auto cp : corpus) {
+    for (const auto& cp : corpus) {
         int attr_value = gdata->get_attr_value(cp, cur_attr_id);
         if (attr_value < 0 || attr_value >= attr_value_cnt) {
             std::cerr << "bad attr value " << attr_value << " for " << cur_attr_id << std::endl;
@@ -65,7 +65,7 @@ int Id3::id3_solution(const std::set<int>& corpus,
         }
         sub_corpus.at(attr_value).insert(cp);
     }
-    for (auto scp : sub_corpus) {
+    for (const auto& scp : sub_corpus) {
         attr_node_t* subtree = nullptr;
         if (0 == scp.size()) {
             std::cerr << "empty sub corpus, parant attr: " << cur_attr_id << std::endl;
@@ -84,7 +84,7 @@ int Id3::find_best_attr(const std::set<int>& corpus,
         const std::set<int>& attrs) {
     double max = 0.0;  
     int best_attr = -1;  
-    for (auto attr : attrs) {
+    for (const auto& attr : attrs) {
         double ret = get_gain(corpus, attr);
         if (ret > max) {
             max = ret;
@@ -108,7 +108,7 @@ double Id3::get_gain(const std::set<int>& corpus, int attr_id) {
     double ans = gdata->get_entropy(corpus);
     double sum = corpus.size();
     std::vector<std::set<int> > attr_ans_vec(attr_count);
-    for (auto cp : corpus) {
+    for (const auto& cp : corpus) {
         int attr_value = gdata->get_attr_value(cp, attr_id);
         if (attr_value < 0 || attr_value >= attr_count) {
             std::cerr << "bad attr value " << attr_value << " for attr " << attr_id << std::endl;
@@ -116,7 +116,7 @@ double Id3::get_gain(const std::set<int>& corpus, int attr_id) {
         }
         attr_ans_vec.at(attr_value).insert(cp);
     }
-    for (auto attr_ans : attr_ans_vec) {
+    for (const auto& attr_ans : attr_ans_vec) {
         ans -= attr_ans.size() / sum * gdata->get_entropy(attr_ans);
     }
     return ans;

@@ -126,7 +126,7 @@ double GlobalData::get_entropy(const std::set<int> &corpus) {
     };
     int pos_cnt = 0, neg_cnt = 0, sum = corpus.size();
     double ans = 0.0;
-    for(auto cp : corpus) {
+    for(const auto& cp : corpus) {
         int is_pos = is_pos_corpus(cp);
         if (1 == is_pos) {
             ++pos_cnt;
